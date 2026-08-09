@@ -1,0 +1,8 @@
+/* Tailwind's three layers: base = resets, components = reusable classes,
+   utilities = the atomic classes we sprinkle in JSX. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* One custom base rule – load a display font from Google Fonts for the hero. */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap");
