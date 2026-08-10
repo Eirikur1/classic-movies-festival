@@ -1,8 +1,54 @@
-# Reykjavík Classics — a Tailwind CSS marketing site
+# Reykjavík Classics — Tailwind + Prismic CMS
 
-A small two-page responsive marketing site for a fictional classic-film festival, built with **Next.js 15 (App Router)** and **Tailwind CSS**.
+A small two-page responsive marketing site for a fictional classic-film festival, built with **Next.js 15 (App Router)**, **Tailwind CSS**, and the **Prismic** headless CMS.
 
-Submitted for _HTML & CSS — Tooling/Tailwind_ in Module 5.
+Submitted for two Module 5 guides:
+
+- _HTML & CSS — Tooling/Tailwind_
+- _Speciality guide — Prismic CMS_
+
+## Prismic CMS
+
+The **home page** (`/`) is content-managed in Prismic. The **schedule page** (`/schedule`) is intentionally left as hard-coded content so the difference between "own DB" and "CMS" is easy to see side-by-side.
+
+### Setup
+
+The repo is already linked to a Prismic repository via `prismic.config.json`. To point at your own repo instead:
+
+```bash
+npx prismic login
+npx prismic init            # or: --repo <existing-repo-name>
+npx prismic push            # push local models to Prismic
+```
+
+### Content model (created via the Prismic CLI, not hand-edited JSON)
+
+- **`Homepage`** — a `single` page type with a slice zone.
+- **`Hero` slice** — fields: `eyebrow` (text), `title` (rich text), `description` (rich text), `cta_label` (text), `cta_link` (link).
+- **`FeatureList` slice** — fields: `heading` (rich text) + a repeatable `items` group with `icon`, `title`, `body`.
+
+All models were added with commands like:
+
+```bash
+npx prismic type create Homepage --format page --single
+npx prismic slice create Hero
+npx prismic field add rich-text title --to-slice hero --label "Title"
+npx prismic slice connect hero --to homepage
+npx prismic push
+```
+
+### Editing content
+
+1. Open <https://prismic.io/dashboard> and pick the repository.
+2. Create a **Homepage** document, add a Hero slice and a FeatureList slice, fill them in, then click **Publish**.
+3. Reload the local site — `createClient()` fetches the published content on the server.
+
+### CMS vs. own database — what I learned
+
+- **Own DB (Postgres / MongoDB projects earlier in this module)**: I write the schema, the API routes, the admin UI. Total control, but every content change is a code change or a raw SQL/Mongo write.
+- **Headless CMS (Prismic)**: the schema lives in the CMS, editors get a polished admin UI for free, and the app just consumes an API. I don't need to build a login, a rich-text editor, or an image uploader — Prismic provides them.
+- **"Headless" means** the CMS has no opinion about the front-end. It just serves content over an API; my Next.js app decides how to render it. That's why the same Prismic content could feed a website, an iOS app, and an email template.
+- **Trade-off**: I lose some flexibility. Complex relational queries (like joins across many types) are awkward. And I'm dependent on a third-party service being up.
 
 ## Pages / layouts
 
