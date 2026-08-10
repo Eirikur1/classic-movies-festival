@@ -1,0 +1,9 @@
+{
+  "repositoryName": "42800e3a",
+  "routes": [
+    {
+      "type": "homepage",
+      "path": "/"
+    }
+  ]
+}
